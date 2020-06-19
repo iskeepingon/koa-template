@@ -4,9 +4,9 @@ class usersServices {
     constructor() {
     }
 
-    query() {
+    query(data = {}) {
         return new Promise((resolve, reject) => {
-            usersModels.find({}, (err, res) => {
+            usersModels.find(data, (err, res) => {
                 if (err) {
                     reject({ code: 0, err })
                 }

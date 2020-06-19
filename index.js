@@ -2,6 +2,8 @@ import Koa from 'koa'
 import KoaRouter from 'koa-router'
 import KoaOnerror from 'koa-onerror'
 import KoaBodyparser from 'koa-bodyparser'
+import KoaLogger from 'koa-logger'
+import KoaJwt from 'koa-jwt'
 import Routers from './core/routers.js'
 
 const app = new Koa()
@@ -39,6 +41,10 @@ Object.keys(Routers).map(item => {
     })
 })
 
+app.use(KoaLogger())
+app.use(KoaJwt({ secret: 'shared-secret' }).unless({
+    path: [/^\/usersControllers\/login/]
+}))
 app.use(KoaBodyparser())
 app.use(koaRouter.routes())
 app.use(koaRouter.allowedMethods())
