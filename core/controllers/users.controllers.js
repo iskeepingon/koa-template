@@ -1,5 +1,6 @@
 import usersServices from '../services/users.services.js'
 import jwt from 'jsonwebtoken'
+import jwtConfig from '../../config/jwt.config.js'
 
 const usersControllers = {}
 
@@ -8,7 +9,7 @@ usersControllers.getList = {
     fn: async (ctx, next) => {
         let { code, res, err } = await usersServices.query()
         if (code == 1) {
-            ctx.body = res
+            ctx.body = { code: 1, res }
         } else {
             next(err)
         }
@@ -22,7 +23,7 @@ usersControllers.login = {
         let { code, res, err } = await usersServices.query({ phone, password })
         if (code == 1) {
             if (res.length > 0) {
-                const token = jwt.sign({ data: res }, 'shared-secret', {expiresIn: 60*60})
+                const token = jwt.sign({ data: res }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
                 ctx.body = { code: 1, res: { token } }
             } else {
                 ctx.body = { code: 0, err: { info: 'no find' } }

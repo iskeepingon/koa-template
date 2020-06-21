@@ -5,6 +5,7 @@ import KoaBodyparser from 'koa-bodyparser'
 import KoaLogger from 'koa-logger'
 import KoaJwt from 'koa-jwt'
 import Routers from './core/routers.js'
+import jwtConfig from './config/jwt.config.js'
 
 const app = new Koa()
 // KoaOnerror(app,{
@@ -34,18 +35,37 @@ const koaRouter = KoaRouter()
 // https://www.cnblogs.com/pl-boke/p/10063351.html 
 // https://www.cnblogs.com/swordfall/p/10841418.html
 
+app.use(KoaLogger())
+
+// Custom 401 handling if you don't want to expose koa-jwt errors to users
+app.use(function (ctx, next) {
+    return next().catch((err) => {
+        if (401 == err.status) {
+            ctx.status = 401
+            ctx.body = {
+                code: 0,
+                err: {
+                    info: `Protected resource, use Authorization header to get access\n`
+                }
+            }
+        } else {
+            throw err
+        }
+    })
+})
+
+app.use(KoaJwt({ secret: jwtConfig.secret }).unless({
+    path: [/^\/usersControllers\/login/]
+}))
+app.use(KoaBodyparser())
+
+
 Object.keys(Routers).map(item => {
     Object.keys(Routers[item]).map(itm => {
         const { type, fn } = Routers[item][itm]
         koaRouter[type](`/${item}/${itm}`, fn)
     })
 })
-
-app.use(KoaLogger())
-app.use(KoaJwt({ secret: 'shared-secret' }).unless({
-    path: [/^\/usersControllers\/login/]
-}))
-app.use(KoaBodyparser())
 app.use(koaRouter.routes())
 app.use(koaRouter.allowedMethods())
 
