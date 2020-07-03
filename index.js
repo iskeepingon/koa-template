@@ -4,6 +4,7 @@ import KoaOnerror from 'koa-onerror'
 import KoaBodyparser from 'koa-bodyparser'
 import KoaLogger from 'koa-logger'
 import KoaJwt from 'koa-jwt'
+import KoaParameter from './core/middlewares/koa-paramter.js'
 import Routers from './core/routers.js'
 import jwtConfig from './config/jwt.config.js'
 
@@ -27,6 +28,7 @@ const koaRouter = KoaRouter()
 // koa-helmet
 // koa-logger
 // koa2-cors
+// koa-parameter
 
 // 数据库
 // mongoose http://www.mongoosejs.net/docs/index.html
@@ -35,6 +37,7 @@ const koaRouter = KoaRouter()
 // https://www.cnblogs.com/pl-boke/p/10063351.html 
 // https://www.cnblogs.com/swordfall/p/10841418.html
 
+app.use(KoaParameter(app))
 app.use(KoaLogger())
 
 // Custom 401 handling if you don't want to expose koa-jwt errors to users
@@ -46,6 +49,14 @@ app.use(function (ctx, next) {
                 code: 0,
                 err: {
                     info: `Protected resource, use Authorization header to get access\n`
+                }
+            }
+        } else if (422 == err.status) {
+            ctx.status = 200
+            ctx.body = {
+                code: 0,
+                err: {
+                    info: `${err.errors[0].message}`
                 }
             }
         } else {
@@ -63,7 +74,11 @@ app.use(KoaBodyparser())
 Object.keys(Routers).map(item => {
     Object.keys(Routers[item]).map(itm => {
         const { type, fn } = Routers[item][itm]
-        koaRouter[type](`/${item}/${itm}`, fn)
+        if (Array.isArray(fn)) {
+            koaRouter[type](`/${item}/${itm}`, ...fn)
+        } else {
+            koaRouter[type](`/${item}/${itm}`, fn)
+        }
     })
 })
 app.use(koaRouter.routes())

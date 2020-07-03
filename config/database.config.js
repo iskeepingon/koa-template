@@ -3,7 +3,7 @@ const databaseConfig = {
   pass: '123456',
   host: 'localhost',
   port: '27017',
-  db: 'thinkjs-cms'
+  db: 'course-cms'
 }
 
 export default databaseConfig

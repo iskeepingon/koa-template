@@ -1,13 +1,13 @@
-import usersServices from '../services/users.services.js'
+import coursesServices from '../services/courses.services.js'
 import jwt from 'jsonwebtoken'
 import jwtConfig from '../../config/jwt.config.js'
 
-const usersControllers = {}
+const coursesControllers = {}
 
-usersControllers.getList = {
+coursesControllers.getList = {
     type: 'get',
     fn: async (ctx, next) => {
-        let { code, data, err } = await usersServices.query()
+        let { code, data, err } = await coursesServices.query()
         if (code == 1) {
             ctx.body = { code: 1, data }
         } else {
@@ -16,8 +16,8 @@ usersControllers.getList = {
     }
 }
 
-usersControllers.login = {
-    type: 'all',
+coursesControllers.createOne = {
+    type: 'post',
     fn: async (ctx, next) => {
         let { phone, password } = ctx.request.body
         ctx.verifyParams({
@@ -45,7 +45,7 @@ usersControllers.login = {
     }
 }
 
-usersControllers.logout = {
+coursesControllers.logout = {
     type: 'get',
     fn: async (ctx, next) => {
         let { phone, password } = ctx.request.body
@@ -63,4 +63,4 @@ usersControllers.logout = {
     }
 }
 
-export default usersControllers
+export default coursesControllers

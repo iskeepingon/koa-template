@@ -1,5 +1,5 @@
 const serverConfig = {
-    port: 3000
+    port: 8360
   }
   
   export default serverConfig

@@ -1,6 +1,6 @@
-import usersModels from '../models/users.models.js'
+import coursesModels from '../models/courses.models.js'
 
-class usersServices {
+class coursesServices {
     constructor() {
     }
 
@@ -16,4 +16,4 @@ class usersServices {
     }
 }
 
-export default new usersServices()
+export default new coursesServices()
