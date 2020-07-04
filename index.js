@@ -32,6 +32,7 @@ const koaRouter = KoaRouter()
 
 // 数据库
 // mongoose http://www.mongoosejs.net/docs/index.html
+// 增删改查的文档 https://www.jianshu.com/p/fe842fab1950
 
 // 用户权限 
 // https://www.cnblogs.com/pl-boke/p/10063351.html 
