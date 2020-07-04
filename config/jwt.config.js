@@ -3,4 +3,4 @@ const jwtConfig = {
   expiresIn: 60 * 60 // 单位秒s
 }
 
-export default jwtConfig
+module.exports = jwtConfig

@@ -1,9 +1,10 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const usersSchema = new mongoose.Schema(
     {
-        phone: String,
-        password: String
+        phone: { type: String, required: true, unique: true },
+        password: { type: String, required: true },
+        createTime: { type: Number, required: true }
     },
     {
         collection: 'users',
@@ -11,4 +12,4 @@ const usersSchema = new mongoose.Schema(
     }
 )
 
-export default mongoose.model('users', usersSchema)
+module.exports = mongoose.model('users', usersSchema)

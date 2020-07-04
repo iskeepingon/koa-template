@@ -6,4 +6,4 @@ const databaseConfig = {
   db: 'course-cms'
 }
 
-export default databaseConfig
+module.exports = databaseConfig

@@ -1,12 +1,12 @@
-import Koa from 'koa'
-import KoaRouter from 'koa-router'
-import KoaOnerror from 'koa-onerror'
-import KoaBodyparser from 'koa-bodyparser'
-import KoaLogger from 'koa-logger'
-import KoaJwt from 'koa-jwt'
-import KoaParameter from './core/middlewares/koa-paramter.js'
-import Routers from './core/routers.js'
-import jwtConfig from './config/jwt.config.js'
+const Koa = require('koa')
+const KoaRouter = require('koa-router')
+const KoaOnerror = require('koa-onerror')
+const KoaBodyparser = require('koa-bodyparser')
+const KoaLogger = require('koa-logger')
+const KoaJwt = require('koa-jwt')
+const KoaParameter = require('./core/middlewares/koa-paramter.js')
+const jwtConfig = require('./config/jwt.config.js')
+const fs = require('fs')
 
 const app = new Koa()
 // KoaOnerror(app,{
@@ -60,28 +60,28 @@ app.use(function (ctx, next) {
                 }
             }
         } else {
-            throw err
+            ctx.status = 200
+            ctx.body = {
+                code: 0,
+                err: {
+                    info: `${err.err.errmsg}`
+                }
+            }
         }
     })
 })
 
 app.use(KoaJwt({ secret: jwtConfig.secret }).unless({
-    path: [/^\/usersControllers\/login/]
+    path: [/^\/users\/login/]
 }))
 app.use(KoaBodyparser())
 
-
-Object.keys(Routers).map(item => {
-    Object.keys(Routers[item]).map(itm => {
-        const { type, fn } = Routers[item][itm]
-        if (Array.isArray(fn)) {
-            koaRouter[type](`/${item}/${itm}`, ...fn)
-        } else {
-            koaRouter[type](`/${item}/${itm}`, fn)
-        }
-    })
+fs.readdirSync(`${__dirname}/core/routers`).forEach(file => {
+    if (file === "index.js") {
+        return
+    }
+    const route = require(`${__dirname}/core/routers/${file}`)
+    app.use(route.routes()).use(route.allowedMethods())
 })
-app.use(koaRouter.routes())
-app.use(koaRouter.allowedMethods())
 
-export default app
+module.exports = app

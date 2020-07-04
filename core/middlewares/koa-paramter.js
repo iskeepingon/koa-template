@@ -1,7 +1,7 @@
-import Parameter from 'parameter'
-import rule from './rule.js'
+const Parameter = require('parameter')
+const rule = require('./rule.js')
 
-export default function (app, translate) {
+module.exports = function (app, translate) {
     let parameter
 
     if (typeof translate === 'function') {
