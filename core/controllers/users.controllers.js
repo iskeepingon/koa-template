@@ -7,6 +7,22 @@ class UsersControllers {
 
     }
 
+    async deleteOne(ctx, next) {
+        let { _id } = ctx.query
+        ctx.verifyParams({
+            _id: {
+                type: 'string',
+                required: true
+            }
+        })
+        let { code, data, err } = await usersServices.deleteOne({ _id })
+        if (code == 1) {
+            ctx.body = { code: 1, data: data }
+        } else {
+            next(err)
+        }
+    }
+
     async updateOne(ctx, next) {
         let { phone, password, roleId, _id } = ctx.request.body
         ctx.verifyParams({
@@ -28,7 +44,7 @@ class UsersControllers {
         }
     }
 
-    async getOne(ctx, next)  {
+    async getOne(ctx, next) {
         let { _id } = ctx.query
         ctx.verifyParams({
             _id: {
@@ -65,7 +81,7 @@ class UsersControllers {
         }
     }
 
-    async getList(ctx, next)  {
+    async getList(ctx, next) {
         let { phone, currentPage, pageSize } = ctx.query
         currentPage = parseInt(currentPage) || 1
         pageSize = parseInt(pageSize) || 10

@@ -62,6 +62,17 @@ class UsersServices {
             })
         })
     }
+
+    deleteOne(data = {}) {
+        return new Promise((resolve, reject) => {
+            let { _id } = data
+            UsersModels.deleteOne({ _id }).then(res => {
+                resolve({ code: 1, data: res })
+            }).catch(err => {
+                reject({ code: 0, err })
+            })
+        })
+    }
 }
 
 module.exports = new UsersServices()

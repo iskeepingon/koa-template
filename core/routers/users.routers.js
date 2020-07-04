@@ -4,6 +4,7 @@ const {
     updateOne,
     getOne,
     createOne,
+    deleteOne,
     getList,
     login,
     logout
@@ -14,6 +15,8 @@ router.post('/updateOne', updateOne)
 router.get('/getOne', getOne)
 
 router.post('/createOne', createOne)
+
+router.get('/deleteOne', deleteOne)
 
 router.get('/getList', getList)
 
