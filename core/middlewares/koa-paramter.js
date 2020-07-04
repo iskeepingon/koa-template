@@ -1,5 +1,5 @@
 const Parameter = require('parameter')
-const rule = require('./rule.js')
+const rule = require('./rule')
 
 module.exports = function (app, translate) {
     let parameter

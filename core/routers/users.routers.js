@@ -7,7 +7,7 @@ const {
     getList,
     login,
     logout
-} = require('../controllers/users.controllers.js')
+} = require('../controllers/users.controllers')
 
 router.post('/updateOne', updateOne)
 

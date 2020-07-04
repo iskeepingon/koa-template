@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-const app = require('./index.js')
-const databaseConfig = require('./config/database.config.js')
-const serverConfig = require('./config/server.config.js')
+const app = require('./index')
+const databaseConfig = require('./config/database.config')
+const serverConfig = require('./config/server.config')
 
 const DBURL =
     `mongodb://${databaseConfig.user}:${databaseConfig.pass}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.db}?authSource=admin`

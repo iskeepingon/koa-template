@@ -1,6 +1,6 @@
-const usersServices = require('../services/users.services.js')
+const usersServices = require('../services/users.services')
 const jwt = require('jsonwebtoken')
-const jwtConfig = require('../../config/jwt.config.js')
+const jwtConfig = require('../../config/jwt.config')
 
 class UsersControllers {
     constructor() {

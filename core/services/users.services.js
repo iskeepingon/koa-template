@@ -1,4 +1,4 @@
-const UsersModels = require('../models/users.models.js')
+const UsersModels = require('../models/users.models')
 
 class UsersServices {
     constructor() {
@@ -55,8 +55,7 @@ class UsersServices {
     updateOne(data = {}) {
         return new Promise((resolve, reject) => {
             let { _id, phone, password } = data
-            let usersModels = new UsersModels(data)
-            usersModels.updateOne({ _id }, { phone, password }).then(res => {
+            UsersModels.updateOne({ _id }, { phone, password }).then(res => {
                 resolve({ code: 1, data: res })
             }).catch(err => {
                 reject({ code: 0, err })
