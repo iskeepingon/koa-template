@@ -1,6 +1,6 @@
 ## require
 
-1. node version >= v7.6.0
+1. node version >= 13.2.0
 2. mongodb version is v4.0.10 
 
 ## install
