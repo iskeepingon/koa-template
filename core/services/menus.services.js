@@ -54,8 +54,8 @@ class MenusServices {
 
     updateOne(data = {}) {
         return new Promise((resolve, reject) => {
-            let { _id, phone, password } = data
-            MenusModels.updateOne({ _id }, { phone, password }).then(res => {
+            let { _id, name, remark, url, number, icon } = data
+            MenusModels.updateOne({ _id }, { name, remark, url, number, icon }).then(res => {
                 resolve({ code: 1, data: res })
             }).catch(err => {
                 reject({ code: 0, err })

@@ -24,19 +24,23 @@ class MenusControllers {
     }
 
     async updateOne(ctx, next) {
-        let { phone, password, roleId, _id } = ctx.request.body
+
+        let { _id } = ctx.query
+        let { name, remark, url, number, icon } = ctx.request.body
+
         ctx.verifyParams({
-            phone: {
-                type: 'phone',
-                required: true
-            },
-            password: {
-                type: 'password',
+            name: {
+                type: 'string',
                 required: true,
-                min: 6
-            }
+                max: 20
+            },
+            remark: {
+                type: 'string',
+                required: false,
+                max: 100
+            },
         })
-        let { code, data, err } = await MenusServices.updateOne({ _id, phone, password })
+        let { code, data, err } = await MenusServices.updateOne({ _id, name, remark, url, number, icon })
         if (code == 1) {
             ctx.body = { code: 1, data: data }
         } else {
@@ -85,19 +89,25 @@ class MenusControllers {
     }
 
     async createOne(ctx, next) {
-        let { phone, password, roleId } = ctx.request.body
+        let { name, remark, url, number, icon, parentId } = ctx.request.body
+      
         ctx.verifyParams({
-            phone: {
-                type: 'phone',
-                required: true
-            },
-            password: {
-                type: 'password',
+            name: {
+                type: 'string',
                 required: true,
-                min: 6
+                max: 20
+            },
+            remark: {
+                type: 'string',
+                required: false,
+                max: 100
+            },
+            parentId: {
+                type: 'string',
+                required: false,
             }
         })
-        let { code, data, err } = await MenusServices.createOne({ phone, password, createTime: Date.now() })
+        let { code, data, err } = await MenusServices.createOne({ name, remark, url, number, icon, parentId, createTime: Date.now() })
         if (code == 1) {
             ctx.body = { code: 1, data: data }
         } else {
@@ -106,62 +116,14 @@ class MenusControllers {
     }
 
     async getList(ctx, next) {
-        let { phone, currentPage, pageSize } = ctx.query
+        let {  currentPage, pageSize } = ctx.query
         currentPage = parseInt(currentPage) || 1
         pageSize = parseInt(pageSize) || 10
-        phone = phone
-        ctx.verifyParams({
-            phone: {
-                type: 'phone',
-                required: false
-            }
-        })
-        let res = await MenusServices.find({ phone, currentPage, pageSize })
+        
+        let res = await MenusServices.find({  currentPage, pageSize })
         let res1 = await MenusServices.count()
         if (res.code == 1 && res1.code == 1) {
             ctx.body = { code: 1, data: res.data, totalSize: res1.dataÒ }
-        } else {
-            next(err)
-        }
-    }
-
-    async login(ctx, next) {
-        let { phone, password } = ctx.request.body
-        ctx.verifyParams({
-            phone: {
-                type: 'phone',
-                required: true,
-            },
-            password: {
-                type: 'password',
-                required: true,
-                min: 6
-            }
-        })
-        let { code, data, err } = await MenusServices.findOne({ phone, password })
-        if (code == 1) {
-            if (data != null) {
-                let { phone, _id } = data
-                const token = jwt.sign({ phone, _id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
-                ctx.body = { code: 1, data: { token } }
-            } else {
-                ctx.body = { code: 0, err: { info: 'no find' } }
-            }
-        } else {
-            next(err)
-        }
-    }
-
-    async logout(ctx, next) {
-        let { phone, password } = ctx.request.body
-        let { code, data, err } = await MenusServices.findOne({ phone, password })
-        if (code == 1) {
-            if (data != null) {
-                const token = jwt.sign({ data }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
-                ctx.body = { code: 1, data: { token } }
-            } else {
-                ctx.body = { code: 0, err: { info: 'no find' } }
-            }
         } else {
             next(err)
         }
