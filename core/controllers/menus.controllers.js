@@ -116,14 +116,9 @@ class MenusControllers {
     }
 
     async getList(ctx, next) {
-        let {  currentPage, pageSize } = ctx.query
-        currentPage = parseInt(currentPage) || 1
-        pageSize = parseInt(pageSize) || 10
-        
-        let res = await MenusServices.find({  currentPage, pageSize })
-        let res1 = await MenusServices.count()
-        if (res.code == 1 && res1.code == 1) {
-            ctx.body = { code: 1, data: res.data, totalSize: res1.dataÒ }
+        let res = await MenusServices.find()
+        if (res.code == 1) {
+            ctx.body = { code: 1, data: res.data}
         } else {
             next(err)
         }

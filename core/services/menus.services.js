@@ -4,26 +4,9 @@ class MenusServices {
     constructor() {
     }
 
-    find(data = {}) {
+    find() {
         return new Promise((resolve, reject) => {
-            let { phone, currentPage, pageSize } = data
-            let condition = {}
-            if (phone) {
-                condition.phone = phone
-            }
-            MenusModels.find(condition).
-                skip((currentPage - 1) * pageSize)
-                .limit(pageSize).then(res => {
-                    resolve({ code: 1, data: res })
-                }).catch(err => {
-                    reject({ code: 0, err })
-                })
-        })
-    }
-
-    count() {
-        return new Promise((resolve, reject) => {
-            MenusModels.count().then(res => {
+            MenusModels.find().then(res => {
                 resolve({ code: 1, data: res })
             }).catch(err => {
                 reject({ code: 0, err })
