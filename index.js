@@ -17,27 +17,6 @@ const app = new Koa()
 // })
 const koaRouter = KoaRouter()
 
-// 中间件 https://www.cnblogs.com/LChenglong/p/12118666.html
-// koa-onerror
-// koa-router
-// koa-bodyparser
-// koa-multer
-// koa-session
-// koa-jwt
-// koa-compress
-// koa-helmet
-// koa-logger
-// koa2-cors
-// koa-parameter
-
-// 数据库
-// mongoose http://www.mongoosejs.net/docs/index.html
-// 增删改查的文档 https://www.jianshu.com/p/fe842fab1950
-
-// 用户权限 
-// https://www.cnblogs.com/pl-boke/p/10063351.html 
-// https://www.cnblogs.com/swordfall/p/10841418.html
-
 app.use(KoaParameter(app))
 app.use(KoaLogger())
 

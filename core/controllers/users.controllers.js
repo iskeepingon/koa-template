@@ -117,7 +117,8 @@ class UsersControllers {
         let { code, data, err } = await usersServices.findOne({ phone, password })
         if (code == 1) {
             if (data != null) {
-                const token = jwt.sign({ data }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
+                let { phone, _id } = data
+                const token = jwt.sign({ phone, _id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
                 ctx.body = { code: 1, data: { token } }
             } else {
                 ctx.body = { code: 0, err: { info: 'no find' } }
