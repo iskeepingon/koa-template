@@ -1,4 +1,4 @@
-const databaseConfig = {
+const mongodbConfig = {
   user: 'admin',
   pass: '123456',
   host: 'localhost',
@@ -6,4 +6,4 @@ const databaseConfig = {
   db: 'course-cms'
 }
 
-module.exports = databaseConfig
+module.exports = mongodbConfig
