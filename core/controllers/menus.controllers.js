@@ -18,7 +18,7 @@ class MenusControllers {
         let { code: code1, data: data1, err: err1 } = await MenusServices.findOne({ parentId: _id })
         if (code1 == 1) {
             if (data1) {
-                ctx.body = { code: 0, err: { info: 'menu item has children' } }
+                ctx.body = { code: 0, err: { info: 'can not be deleted,becuase the menu has submenus' } }
             } else {
                 let { code, data, err } = await MenusServices.deleteOne({ _id })
                 if (code == 1) {
