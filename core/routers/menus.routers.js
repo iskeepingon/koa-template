@@ -23,8 +23,4 @@ router.get('/deleteOne', deleteOne)
 
 router.get('/getList', getList)
 
-router.get('/logout', logout)
-
-router.post('/login', login)
-
 module.exports = router
