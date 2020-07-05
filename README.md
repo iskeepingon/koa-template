@@ -7,13 +7,30 @@
 
 ```
 npm install
+npm install -g pm2
+npm install -g nodemon
 ```
 
 ## run
 
+### development environment
+
 ```
-node app.js or npm run start
+nodemon app.js or npm run dev
 ```
+### why use nodemon
+
+<a href="https://zhuanlan.zhihu.com/p/96720675">nodemon</a>
+
+### production environment
+
+```
+pm2 start app.js or npm run start
+```
+
+### why use pm2
+
+<a href="https://www.cnblogs.com/wangcp-2014/p/10874417.html">pm2</a>
 
 ## related articles
 

@@ -57,9 +57,6 @@ app.use(KoaJwt({ secret: jwtConfig.secret }).unless({
 app.use(KoaBodyparser())
 
 fs.readdirSync(`${__dirname}/core/routers`).forEach(file => {
-    if (file === "index.js") {
-        return
-    }
     const route = require(`${__dirname}/core/routers/${file}`)
     app.use(route.routes()).use(route.allowedMethods())
 })
