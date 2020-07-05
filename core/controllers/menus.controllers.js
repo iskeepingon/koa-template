@@ -15,11 +15,20 @@ class MenusControllers {
                 required: true
             }
         })
-        let { code, data, err } = await MenusServices.deleteOne({ _id })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
+        let { code: code1, data: data1, err: err1 } = await MenusServices.findOne({ parentId: _id })
+        if (code1 == 1) {
+            if (data1) {
+                ctx.body = { code: 0, err: { info: 'menu item has children' } }
+            } else {
+                let { code, data, err } = await MenusServices.deleteOne({ _id })
+                if (code == 1) {
+                    ctx.body = { code: 1, data: data }
+                } else {
+                    next(err)
+                }
+            }
         } else {
-            next(err)
+            next(err1)
         }
     }
 
@@ -90,7 +99,7 @@ class MenusControllers {
 
     async createOne(ctx, next) {
         let { name, remark, url, number, icon, parentId } = ctx.request.body
-      
+
         ctx.verifyParams({
             name: {
                 type: 'string',
@@ -118,7 +127,7 @@ class MenusControllers {
     async getList(ctx, next) {
         let res = await MenusServices.find()
         if (res.code == 1) {
-            ctx.body = { code: 1, data: res.data}
+            ctx.body = { code: 1, data: res.data }
         } else {
             next(err)
         }
