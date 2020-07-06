@@ -27,17 +27,20 @@ mongoose.connection.on('disconnected', function () {
     console.log(`Mongoose connection disconnected`)
 })
 
-const redis = require('redis')
-const client = redis.createClient(redisConfig)
+// const redis = require('redis')
+// const client = redis.createClient(redisConfig)
 
-client.on('error', function (error) {
-    console.error(error)
-})
+// client.on('error', function (error) {
+//     console.error(error)
+// })
 
-client.on('connect', function () {
-
-})
+// client.on('connect', function () {
+//     console.log(`redis connection open to`)
+// })
 
 client.on('end', function () {
-
+    console.log(`redis connection end`)
 })
+
+client.set('key', 'value', redis.print)
+client.get('key', redis.print)

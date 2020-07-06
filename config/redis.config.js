@@ -3,7 +3,7 @@ const redisConfig = {
   pass: '123456',
   host: 'localhost',
   port: '6379',
-  db: 'course-cms'
+  db: 1
 }
 
 module.exports = redisConfig
