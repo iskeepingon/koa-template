@@ -97,7 +97,7 @@ class UsersControllers {
         })
         let res = await usersServices.findOne({ phone, password })
         if (res) {
-            let { phone, _id } = data
+            let { phone, _id } = res
             const token = jwt.sign({ phone, _id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
             ctx.body = { code: 1, data: { token } }
         } else {
