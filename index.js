@@ -25,7 +25,7 @@ app.use(function (ctx, next) {
             ctx.body = {
                 code: 0,
                 err: {
-                    info: `Protected resource, use Authorization header to get access\n`
+                    info: `${err.message || 'Protected resource, use Authorization header to get access\n'}`
                 }
             }
         } else if (422 == err.status) {
