@@ -41,7 +41,7 @@ app.use(function (ctx, next) {
             ctx.body = {
                 code: 0,
                 err: {
-                    info: `${err.err.errmsg}`
+                    info: `${err.errmsg || err.err.errmsg}`
                 }
             }
         }
