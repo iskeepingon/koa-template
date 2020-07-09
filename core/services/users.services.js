@@ -5,73 +5,38 @@ class UsersServices {
     }
 
     find(data = {}) {
-        return new Promise((resolve, reject) => {
-            let { phone, currentPage, pageSize } = data
-            let condition = {}
-            if (phone) {
-                condition.phone = phone
-            }
-            UsersModels.find(condition).
-                skip((currentPage - 1) * pageSize)
-                .limit(pageSize).then(res => {
-                    resolve({ code: 1, data: res })
-                }).catch(err => {
-                    reject({ code: 0, err })
-                })
-        })
+        let { phone, currentPage, pageSize } = data
+        let condition = {}
+        if (phone) {
+            condition.phone = phone
+        }
+        return UsersModels
+            .find(condition)
+            .skip((currentPage - 1) * pageSize)
+            .limit(pageSize)
     }
 
     count() {
-        return new Promise((resolve, reject) => {
-            UsersModels.count().then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        return UsersModels.count()
     }
 
     findOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            UsersModels.findOne(data).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        return UsersModels.findOne(data)
     }
 
     createOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            let usersModels = new UsersModels(data)
-            usersModels.save(data).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        let usersModels = new UsersModels(data)
+        return usersModels.save(data)
     }
 
     updateOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            let { _id, phone, password } = data
-            UsersModels.updateOne({ _id }, { phone, password }).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        let { _id, phone, password } = data
+        return UsersModels.updateOne({ _id }, { phone, password })
     }
 
     deleteOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            let { _id } = data
-            UsersModels.deleteOne({ _id }).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        let { _id } = data
+        return UsersModels.deleteOne({ _id })
     }
 }
 

@@ -17,9 +17,6 @@ const app = new Koa()
 // })
 const koaRouter = KoaRouter()
 
-app.use(KoaParameter(app))
-app.use(KoaLogger())
-
 // Custom 401 handling if you don't want to expose koa-jwt errors to users
 app.use(function (ctx, next) {
     return next().catch((err) => {
@@ -51,6 +48,9 @@ app.use(function (ctx, next) {
     })
 })
 
+app.use(KoaParameter(app))
+app.use(KoaLogger())
+
 app.use(KoaJwt({ secret: jwtConfig.secret }).unless({
     path: [/^\/users\/login/]
 }))
@@ -58,6 +58,7 @@ app.use(KoaBodyparser())
 
 fs.readdirSync(`${__dirname}/core/routers`).forEach(file => {
     const route = require(`${__dirname}/core/routers/${file}`)
+    const routes = route.routes()
     app.use(route.routes()).use(route.allowedMethods())
 })
 
