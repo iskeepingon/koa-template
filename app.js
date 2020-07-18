@@ -38,9 +38,9 @@ mongoose.connection.on('disconnected', function () {
 //     console.log(`redis connection open to`)
 // })
 
-client.on('end', function () {
-    console.log(`redis connection end`)
-})
+// client.on('end', function () {
+//     console.log(`redis connection end`)
+// })
 
-client.set('key', 'value', redis.print)
-client.get('key', redis.print)
+// client.set('key', 'value', redis.print)
+// client.get('key', redis.print)

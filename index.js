@@ -40,11 +40,12 @@ app.use(function (ctx, next) {
                 }
             }
         } else {
+            console.log(err)
             ctx.status = 200
             ctx.body = {
                 code: 0,
                 err: {
-                    info: `${err.err.errmsg}`
+                    info: `${err.errmsg}`
                 }
             }
         }
