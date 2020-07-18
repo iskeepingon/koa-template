@@ -17,9 +17,6 @@ const app = new Koa()
 // })
 const koaRouter = KoaRouter()
 
-app.use(KoaParameter(app))
-app.use(KoaLogger())
-
 // Custom 401 handling if you don't want to expose koa-jwt errors to users
 app.use(function (ctx, next) {
     return next().catch((err) => {
@@ -28,7 +25,7 @@ app.use(function (ctx, next) {
             ctx.body = {
                 code: 0,
                 err: {
-                    info: `Protected resource, use Authorization header to get access\n`
+                    info: `${err.message || 'Protected resource, use Authorization header to get access\n'}`
                 }
             }
         } else if (422 == err.status) {
@@ -45,12 +42,15 @@ app.use(function (ctx, next) {
             ctx.body = {
                 code: 0,
                 err: {
-                    info: `${err.errmsg}`
+                    info: `${err.errmsg || err.err.errmsg}`
                 }
             }
         }
     })
 })
+
+app.use(KoaParameter(app))
+app.use(KoaLogger())
 
 app.use(KoaJwt({ secret: jwtConfig.secret }).unless({
     path: [/^\/users\/login/]
@@ -59,6 +59,7 @@ app.use(KoaBodyparser())
 
 fs.readdirSync(`${__dirname}/core/routers`).forEach(file => {
     const route = require(`${__dirname}/core/routers/${file}`)
+    const routes = route.routes()
     app.use(route.routes()).use(route.allowedMethods())
 })
 

@@ -7,7 +7,7 @@ class UsersControllers {
 
     }
 
-    async deleteOne(ctx, next) {
+    async deleteOne(ctx) {
         let { _id } = ctx.query
         ctx.verifyParams({
             _id: {
@@ -15,15 +15,11 @@ class UsersControllers {
                 required: true
             }
         })
-        let { code, data, err } = await usersServices.deleteOne({ _id })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await usersServices.deleteOne({ _id })
+        ctx.body = { code: 1, data: res }
     }
 
-    async updateOne(ctx, next) {
+    async updateOne(ctx) {
         let { phone, password, roleId, _id } = ctx.request.body
         ctx.verifyParams({
             phone: {
@@ -36,15 +32,11 @@ class UsersControllers {
                 min: 6
             }
         })
-        let { code, data, err } = await usersServices.updateOne({ _id, phone, password })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await usersServices.updateOne({ _id, phone, password })
+        ctx.body = { code: 1, data: res }
     }
 
-    async getOne(ctx, next) {
+    async getOne(ctx) {
         let { _id } = ctx.query
         ctx.verifyParams({
             _id: {
@@ -52,15 +44,12 @@ class UsersControllers {
                 required: true
             }
         })
-        let { code, data, err } = await usersServices.findOne({ _id: _id })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+
+        let res = await usersServices.findOne({ _id: _id })
+        ctx.body = { code: 1, data: res }
     }
 
-    async createOne(ctx, next) {
+    async createOne(ctx) {
         let { phone, password, roleId } = ctx.request.body
         ctx.verifyParams({
             phone: {
@@ -73,15 +62,11 @@ class UsersControllers {
                 min: 6
             }
         })
-        let { code, data, err } = await usersServices.createOne({ phone, password, createTime: Date.now() })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await usersServices.createOne({ phone, password, createTime: Date.now() })
+        ctx.body = { code: 1, data: res }
     }
 
-    async getList(ctx, next) {
+    async getList(ctx) {
         let { phone, currentPage, pageSize } = ctx.query
         currentPage = parseInt(currentPage) || 1
         pageSize = parseInt(pageSize) || 10
@@ -94,14 +79,10 @@ class UsersControllers {
         })
         let res = await usersServices.find({ phone, currentPage, pageSize })
         let res1 = await usersServices.count()
-        if (res.code == 1 && res1.code == 1) {
-            ctx.body = { code: 1, data: res.data, totalSize: res1.dataÒ }
-        } else {
-            next(err)
-        }
+        ctx.body = { code: 1, data: res, totalSize: res1 }
     }
 
-    async login(ctx, next) {
+    async login(ctx) {
         let { phone, password } = ctx.request.body
         ctx.verifyParams({
             phone: {
@@ -114,32 +95,24 @@ class UsersControllers {
                 min: 6
             }
         })
-        let { code, data, err } = await usersServices.findOne({ phone, password })
-        if (code == 1) {
-            if (data != null) {
-                let { phone, _id } = data
-                const token = jwt.sign({ phone, _id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
-                ctx.body = { code: 1, data: { token } }
-            } else {
-                ctx.body = { code: 0, err: { info: 'no find' } }
-            }
+        let res = await usersServices.findOne({ phone, password })
+        if (res) {
+            let { phone, _id } = res
+            const token = jwt.sign({ phone, _id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
+            ctx.body = { code: 1, data: { token } }
         } else {
-            next(err)
+            ctx.body = { code: 0, err: { info: 'no find' } }
         }
     }
 
-    async logout(ctx, next) {
+    async logout(ctx) {
         let { phone, password } = ctx.request.body
-        let { code, data, err } = await usersServices.findOne({ phone, password })
-        if (code == 1) {
-            if (data != null) {
-                const token = jwt.sign({ data }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
-                ctx.body = { code: 1, data: { token } }
-            } else {
-                ctx.body = { code: 0, err: { info: 'no find' } }
-            }
+        let res = await usersServices.findOne({ phone, password })
+        if (res) {
+            const token = jwt.sign({ data }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
+            ctx.body = { code: 1, data: { token } }
         } else {
-            next(err)
+            ctx.body = { code: 0, err: { info: 'no find' } }
         }
     }
 }

@@ -7,7 +7,7 @@ class MenusControllers {
 
     }
 
-    async deleteOne(ctx, next) {
+    async deleteOne(ctx) {
         let { _id } = ctx.query
         ctx.verifyParams({
             _id: {
@@ -15,28 +15,18 @@ class MenusControllers {
                 required: true
             }
         })
-        let { code: code1, data: data1, err: err1 } = await MenusServices.findOne({ parentId: _id })
-        if (code1 == 1) {
-            if (data1) {
-                ctx.body = { code: 0, err: { info: 'can not be deleted,becuase the menu has submenus' } }
-            } else {
-                let { code, data, err } = await MenusServices.deleteOne({ _id })
-                if (code == 1) {
-                    ctx.body = { code: 1, data: data }
-                } else {
-                    next(err)
-                }
-            }
+        let res = await MenusServices.findOne({ parentId: _id })
+        if (res) {
+            ctx.body = { code: 0, err: { info: 'can not be deleted,becuase the menu has submenus' } }
         } else {
-            next(err1)
+            let res1 = await MenusServices.deleteOne({ _id })
+            ctx.body = { code: 1, data: res1 }
         }
     }
 
-    async updateOne(ctx, next) {
-
+    async updateOne(ctx) {
         let { _id } = ctx.query
         let { name, remark, url, number, icon } = ctx.request.body
-
         ctx.verifyParams({
             name: {
                 type: 'string',
@@ -49,15 +39,11 @@ class MenusControllers {
                 max: 100
             },
         })
-        let { code, data, err } = await MenusServices.updateOne({ _id, name, remark, url, number, icon })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await MenusServices.updateOne({ _id, name, remark, url, number, icon })
+        ctx.body = { code: 1, data: res }
     }
 
-    async getOne(ctx, next) {
+    async getOne(ctx) {
         let { _id } = ctx.query
         ctx.verifyParams({
             _id: {
@@ -65,15 +51,11 @@ class MenusControllers {
                 required: true
             }
         })
-        let { code, data, err } = await MenusServices.findOne({ _id: _id })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await MenusServices.findOne({ _id: _id })
+        ctx.body = { code: 1, data: res }
     }
 
-    async createRootOne(ctx, next) {
+    async createRootOne(ctx) {
         let { name, remark, url, number, icon } = ctx.request.body
         let parentId = '0'
         let createTime = Date.now()
@@ -89,15 +71,11 @@ class MenusControllers {
                 max: 100
             }
         })
-        let { code, data, err } = await MenusServices.createOne({ name, remark, url, number, icon, parentId, createTime })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await MenusServices.createOne({ name, remark, url, number, icon, parentId, createTime })
+        ctx.body = { code: 1, data: res }
     }
 
-    async createOne(ctx, next) {
+    async createOne(ctx) {
         let { name, remark, url, number, icon, parentId } = ctx.request.body
 
         ctx.verifyParams({
@@ -116,21 +94,13 @@ class MenusControllers {
                 required: false,
             }
         })
-        let { code, data, err } = await MenusServices.createOne({ name, remark, url, number, icon, parentId, createTime: Date.now() })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await MenusServices.createOne({ name, remark, url, number, icon, parentId, createTime: Date.now() })
+        ctx.body = { code: 1, data: res }
     }
 
-    async getList(ctx, next) {
+    async getList(ctx) {
         let res = await MenusServices.find()
-        if (res.code == 1) {
-            ctx.body = { code: 1, data: res.data }
-        } else {
-            next(err)
-        }
+        ctx.body = { code: 1, data: res }
     }
 }
 
