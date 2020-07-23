@@ -104,4 +104,4 @@ class MenusControllers {
     }
 }
 
-module.exports = new MenusControllers
+module.exports = new MenusControllers()

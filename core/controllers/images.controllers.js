@@ -2,7 +2,7 @@ const ImagesServices = require('../services/images.services')
 const jwt = require('jsonwebtoken')
 const jwtConfig = require('../../config/jwt.config')
 
-class MenusControllers {
+class ImagesControllers {
     constructor() {
 
     }
@@ -112,4 +112,4 @@ class MenusControllers {
     }
 }
 
-module.exports = new MenusControllers
+module.exports = new ImagesControllers()
