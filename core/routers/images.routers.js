@@ -1,21 +1,18 @@
 const KoaRouter = require('koa-router')
-const router = new KoaRouter({ prefix: '/menus' })
+const router = new KoaRouter({ prefix: '/img' })
 const {
     updateOne,
     getOne,
     createOne,
-    createRootOne,
     deleteOne,
     getList
-} = require('../controllers/menus.controllers')
+} = require('../controllers/images.controllers')
 
 router.post('/updateOne', updateOne)
 
 router.get('/getOne', getOne)
 
 router.post('/createOne', createOne)
-
-router.post('/createRootOne', createRootOne)
 
 router.get('/deleteOne', deleteOne)
 

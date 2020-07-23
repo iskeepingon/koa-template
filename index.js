@@ -37,6 +37,7 @@ app.use(function (ctx, next) {
                 }
             }
         } else {
+            console.log(err)
             ctx.status = 200
             ctx.body = {
                 code: 0,
