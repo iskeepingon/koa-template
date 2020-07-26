@@ -6,11 +6,12 @@ class ImagesServices {
 
     find(data = {}) {
         return new Promise((resolve, reject) => {
-            let { name, currentPage, pageSize } = data
-
+            let { name, currentPage, pageSize } = data            
             let condition = {}
+
             if (name) {
-                condition.name = name
+                let reg = new RegExp(name,"g")
+                condition.name = {$regex:reg} //name
             }
             ImagesModels.find(condition).
                 skip((currentPage - 1) * pageSize)

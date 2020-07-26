@@ -69,7 +69,6 @@ class MenusControllers {
 
     async createOne(ctx, next) {
         let { name, url } = ctx.request.body
-        console.log(ctx.request.body);
         ctx.verifyParams({
             name: {
                 type: 'string',
@@ -102,7 +101,7 @@ class MenusControllers {
         pageSize = parseInt(pageSize) || 10
         name = name
 
-        let res = await ImagesServices.find( {  name, currentPage, pageSize})
+        let res = await ImagesServices.find( { name, currentPage, pageSize})
         let res1 = await ImagesServices.count()
         if (res.code == 1) {
             ctx.body = { code: 1, totalSize: res1.data, data: res.data }
