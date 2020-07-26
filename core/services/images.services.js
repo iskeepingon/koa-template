@@ -5,76 +5,38 @@ class ImagesServices {
     }
 
     find(data = {}) {
-        return new Promise((resolve, reject) => {
-            let { name, currentPage, pageSize } = data            
-            let condition = {}
-
-            if (name) {
-                let reg = new RegExp(name,"g")
-                condition.name = {$regex:reg} //name
-            }
-            ImagesModels.find(condition).
-                skip((currentPage - 1) * pageSize)
-                .limit(pageSize).then(res => {
-                    resolve({ code: 1, data: res })
-                }).catch(err => {
-                    reject({ code: 0, err })
-                })
-        })
+        let { name, currentPage, pageSize } = data            
+        let condition = {}
+        if (name) {
+            let reg = new RegExp(name,"g")
+            condition.name = {$regex:reg} //name
+        }
+        return ImagesModels.find(condition).
+            skip((currentPage - 1) * pageSize)
+            .limit(pageSize)
     }
 
     count() {
-        return new Promise((resolve, reject) => {
-            ImagesModels.count().then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        return ImagesModels.count()
     }
 
     findOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            ImagesModels.findOne(data).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        return ImagesModels.findOne(data)
     }
 
     createOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            let imagesModels = new ImagesModels(data)
-
-            imagesModels.save(data).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        let imagesModels = new ImagesModels(data)
+        return imagesModels.save(data)
     }
 
     updateOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            let { _id, name, url } = data
-            ImagesModels.updateOne({ _id }, { name, url  }).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        let { _id, name, url } = data
+        return ImagesModels.updateOne({ _id }, { name, url  })
     }
 
     deleteOne(data = {}) {
-        return new Promise((resolve, reject) => {
-            let { _id } = data
-            ImagesModels.deleteOne({ _id }).then(res => {
-                resolve({ code: 1, data: res })
-            }).catch(err => {
-                reject({ code: 0, err })
-            })
-        })
+        let { _id } = data
+        return ImagesModels.deleteOne({ _id })
     }
 }
 

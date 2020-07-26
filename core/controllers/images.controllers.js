@@ -7,10 +7,8 @@ class MenusControllers {
 
     }
 
-    async deleteOne(ctx, next) {
+    async deleteOne(ctx) {
         let { _id } = ctx.query
-
-    
         ctx.verifyParams({
             _id: {
                 type: 'string',
@@ -18,18 +16,13 @@ class MenusControllers {
             }
         })
        
-        let { code, data, err } = await ImagesServices.deleteOne({ _id })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res= await ImagesServices.deleteOne({ _id })
+        ctx.body = { code: 1, data: res }
     }
 
-    async updateOne(ctx, next) {
-
+    async updateOne(ctx) {
         let { _id } = ctx.query
-        let { name, remark, url, number, icon } = ctx.request.body
+        let { name, url } = ctx.request.body
 
         ctx.verifyParams({
             name: {
@@ -42,15 +35,17 @@ class MenusControllers {
                 required: true
             },
         })
-        let { code, data, err } = await ImagesServices.updateOne({ _id, name, url })
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
+
+        let findData = await ImagesServices.findOne({ name: name })
+        if( findData ) {
+            ctx.body = { code: 0, err: { info :"图片名称不能重复" }}
+        } else {  
+            let res = await ImagesServices.updateOne({ _id, name, url })
+            ctx.body = { code: 1, data: res }
         }
     }
 
-    async getOne(ctx, next) {
+    async getOne(ctx) {
         let { name } = ctx.query
         ctx.verifyParams({
             name: {
@@ -58,16 +53,11 @@ class MenusControllers {
                 required: true
             }
         })
-        let { code, data, err } = await ImagesServices.findOne({ name: name })
-       
-        if (code == 1) {
-            ctx.body = { code: 1, data: data }
-        } else {
-            next(err)
-        }
+        let res = await ImagesServices.findOne({ name: name })
+         ctx.body = { code: 1, data: res }
     }
 
-    async createOne(ctx, next) {
+    async createOne(ctx) {
         let { name, url } = ctx.request.body
         ctx.verifyParams({
             name: {
@@ -81,21 +71,16 @@ class MenusControllers {
             }
         })
 
-        let { data:findData} = await ImagesServices.findOne({ name: name })
-
+        let findData = await ImagesServices.findOne({ name: name })
         if( findData ) {
             ctx.body = { code: 0, err: { info :"图片名称不能重复" }}
         } else {
-            let { code, data, err } = await ImagesServices.createOne({ name, url,  createTime: Date.now() })
-            if (code == 1) {
-                ctx.body = { code: 1, data: data }
-            } else {
-                next(err)
-            }
+            let res = await ImagesServices.createOne({ name, url,  createTime: Date.now() })
+            ctx.body = { code: 1, data: res }
         }
     }
 
-    async getList(ctx, next) {
+    async getList(ctx) {
         let { name , currentPage, pageSize } = ctx.query
         currentPage = parseInt(currentPage) || 1
         pageSize = parseInt(pageSize) || 10
@@ -103,11 +88,8 @@ class MenusControllers {
 
         let res = await ImagesServices.find( { name, currentPage, pageSize})
         let res1 = await ImagesServices.count()
-        if (res.code == 1) {
-            ctx.body = { code: 1, totalSize: res1.data, data: res.data }
-        } else {
-            next(err)
-        }
+        ctx.body = { code: 1, totalSize: res1, data: res }
+        
     }
 }
 
