@@ -45,3 +45,4 @@ pm2 start app.js or npm run start
 9. <a href="https://www.cnblogs.com/aspsea/articles/10964606.html">redis登录密码设置</a>
 10. <a href="https://www.runoob.com/redis/redis-tutorial.html">redis入门教程</a>
 11. <a href="https://www.npmjs.com/package/redis">redis包</a>
+12. <a href="https://www.cnblogs.com/sunhaoyu/articles/5882240.html">系统权限管理设计</a>
